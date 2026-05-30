@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 修复1：加上 viewport，所有手机正常显示 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 关键：适配所有手机屏幕，解决显示错乱问题 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我们的故事</title>
     <style>
         * {
@@ -11,10 +11,11 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #000;
-            color: #fff;
+            background-color: #000000;
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -22,47 +23,66 @@
             justify-content: center;
             padding: 20px;
         }
+
         .container {
             text-align: center;
             max-width: 400px;
             width: 100%;
         }
+
+        /* 优化照片样式 */
         .photo {
             width: 100%;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.1);
+            object-fit: cover;
         }
+
         .title {
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 26px;
+            margin-bottom: 35px;
             font-weight: 600;
+            letter-spacing: 1px;
         }
+
+        /* 优化计时器布局和样式 */
         .timer {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
+
         .item {
-            background: rgba(255,255,255,0.1);
-            padding: 12px 10px;
-            border-radius: 8px;
-            min-width: 70px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 18px 15px;
+            border-radius: 12px;
+            min-width: 80px;
+            backdrop-filter: blur(10px);
         }
+
         .num {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
+
         .unit {
-            font-size: 12px;
-            opacity: 0.8;
+            font-size: 14px;
+            opacity: 0.75;
+            letter-spacing: 2px;
+        }
+
+        /* 隐藏多余的代码文本 */
+        code, pre {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 建议换成稳定图床，暂时先用你原图 -->
+        <!-- 这里替换成你的图片链接 -->
         <img class="photo" src="https://github.com/GAOYUAN200/our-story/blob/main/1ee8ea1eedae471666d7a9b6961ce1b7.jpg?raw=true" alt="我们">
         <div class="title">我们在一起的时间</div>
         <div class="timer">
@@ -86,15 +106,15 @@
     </div>
 
 <script>
-// 修复2：只留一次防缩放，避免iOS卡死
+// 防止双指缩放，避免页面误触
 document.addEventListener('touchstart', function(e) {
     if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
 
-// 修复3：起始时间（月份9=10月，小时22点）
+// 修正时间：2025年10月5日 22:23（月份0-11，所以10月写9）
 var startDate = new Date(2025, 9, 5, 22, 23, 0).getTime();
 
-// 修复4：不用箭头函数、不用padStart，兼容旧手机
+// 兼容旧手机的补零函数
 function pad(num) {
     return num < 10 ? '0' + num : '' + num;
 }
@@ -114,13 +134,14 @@ function updateTimer() {
     document.getElementById('seconds-value').innerText = pad(seconds);
 }
 
+// 初始化计时器并每秒更新
 updateTimer();
 setInterval(updateTimer, 1000);
 
+// 页面切回时同步更新时间
 document.addEventListener('visibilitychange', function() {
     if (!document.hidden) updateTimer();
 });
 </script>
-
 </body>
 </html>
